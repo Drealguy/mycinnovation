@@ -148,7 +148,7 @@ export default function Product() {
                 className="flex flex-col overflow-hidden rounded-2xl border border-ink/8"
               >
                 {p.image ? (
-                  <div className="flex h-40 items-center justify-center bg-ink/5 p-4">
+                  <div className="flex aspect-[3/4] items-center justify-center bg-ink/5 p-6">
                     <img
                       src={p.image}
                       alt={`${p.name} ${p.spec}`}
@@ -156,7 +156,7 @@ export default function Product() {
                     />
                   </div>
                 ) : (
-                  <IconPanel icon={cat.icon} tone={cat.tone} className="h-40" size={36} />
+                  <IconPanel icon={cat.icon} tone={cat.tone} className="aspect-[3/4]" size={36} />
                 )}
                 <div className="flex flex-1 flex-col p-5">
                   <span className="text-xs font-semibold uppercase tracking-wide text-brand-green">
