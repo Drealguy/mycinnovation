@@ -64,8 +64,9 @@ const formatNaira = (n) => `₦${n.toLocaleString('en-NG')}`
 export default function Product() {
   const [active, setActive] = useState('all')
 
-  const visible =
-    active === 'all' ? products : products.filter((p) => p.category === active)
+  const visible = (active === 'all' ? products : products.filter((p) => p.category === active))
+    .slice()
+    .sort((a, b) => (b.image ? 1 : 0) - (a.image ? 1 : 0))
 
   return (
     <div>
