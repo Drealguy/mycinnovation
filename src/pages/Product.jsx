@@ -29,12 +29,25 @@ const products = [
   { category: 'panels', name: 'Monocrystalline Solar Panel', spec: '550W' },
   { category: 'inverters', name: 'Pure Sine Wave Inverter', spec: '3kVA / 24V' },
   { category: 'inverters', name: 'Pure Sine Wave Inverter', spec: '5kVA / 48V' },
-  { category: 'inverters', name: 'Deye Hybrid Inverter', spec: '8kW', image: deyeInverter },
-  { category: 'batteries', name: 'Deye Low-Voltage Battery', spec: 'SE-F5(L)', image: deyeBattery },
+  {
+    category: 'inverters',
+    name: 'Deye Hybrid Inverter 8kW LV Battery Supported',
+    spec: 'SUN-8K-SG05LP1-EU-SM2 · Single Phase',
+    sku: 'DEYEINV8K-SG05LP1-EU',
+    price: 1600000,
+    image: deyeInverter,
+  },
   {
     category: 'batteries',
-    name: 'Eastman Solar LiFePO4 Battery',
-    spec: '24V (ES25.6-230LP) & 48V (ES51.2-230LP)',
+    name: 'Deye Low Voltage SE-F5(L) Battery',
+    spec: '5.12kWh · 51.2V',
+    price: 800000,
+    image: deyeBattery,
+  },
+  {
+    category: 'batteries',
+    name: 'Eastman Lithium Battery',
+    spec: '5kWh 24V & 10kWh 51.2V',
     image: eastmanBattery,
   },
   { category: 'batteries', name: 'Tubular / AGM Battery', spec: '200Ah / 12V' },
@@ -42,6 +55,8 @@ const products = [
   { category: 'cctv', name: 'HD Bullet Camera', spec: 'Outdoor, Night Vision' },
   { category: 'cctv', name: 'NVR Kit', spec: '4 / 8 / 16 Channel' },
 ]
+
+const formatNaira = (n) => `₦${n.toLocaleString('en-NG')}`
 
 export default function Product() {
   const [active, setActive] = useState('all')
@@ -66,31 +81,48 @@ export default function Product() {
 
       {/* Category filter */}
       <section className="sticky top-[73px] z-30 border-b border-ink/8 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-4 lg:px-8">
-          <button
-            onClick={() => setActive('all')}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-              active === 'all'
-                ? 'bg-brand-green text-white'
-                : 'bg-ink/5 text-ink/70 hover:bg-ink/10'
-            }`}
+        <div className="mx-auto max-w-7xl px-5 py-4 lg:px-8">
+          {/* Mobile: dropdown */}
+          <select
+            value={active}
+            onChange={(e) => setActive(e.target.value)}
+            className="w-full rounded-full border border-ink/15 bg-white px-4 py-2.5 text-sm font-semibold text-ink sm:hidden"
           >
-            All Products
-          </button>
-          {categories.map((c) => (
+            <option value="all">All Products</option>
+            {categories.map((c) => (
+              <option key={c.key} value={c.key}>
+                {c.label}
+              </option>
+            ))}
+          </select>
+
+          {/* Tablet & up: pills */}
+          <div className="hidden gap-2 overflow-x-auto sm:flex">
             <button
-              key={c.key}
-              onClick={() => setActive(c.key)}
-              className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                active === c.key
+              onClick={() => setActive('all')}
+              className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                active === 'all'
                   ? 'bg-brand-green text-white'
                   : 'bg-ink/5 text-ink/70 hover:bg-ink/10'
               }`}
             >
-              <c.icon size={15} />
-              {c.label}
+              All Products
             </button>
-          ))}
+            {categories.map((c) => (
+              <button
+                key={c.key}
+                onClick={() => setActive(c.key)}
+                className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                  active === c.key
+                    ? 'bg-brand-green text-white'
+                    : 'bg-ink/5 text-ink/70 hover:bg-ink/10'
+                }`}
+              >
+                <c.icon size={15} />
+                {c.label}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -99,8 +131,8 @@ export default function Product() {
         <div className="flex items-start gap-3 rounded-2xl bg-amber/10 px-5 py-4 text-sm text-amber-dark">
           <MessageCircle size={18} className="mt-0.5 shrink-0" />
           <p>
-            Prices vary by specification, brand, and availability — message
-            us on WhatsApp for today's pricing on any item below.
+            Prices are in Naira, per unit. For items without a listed price,
+            message us on WhatsApp for a quote.
           </p>
         </div>
       </div>
@@ -132,21 +164,30 @@ export default function Product() {
                   </span>
                   <h3 className="mt-1 font-semibold text-ink">{p.name}</h3>
                   <p className="mt-1 text-sm text-muted">{p.spec}</p>
+                  {p.sku && <p className="mt-0.5 text-xs text-ink/40">SKU: {p.sku}</p>}
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="rounded-full bg-ink/5 px-3 py-1 text-xs font-semibold text-ink/70">
-                      Contact for price
-                    </span>
+                    {p.price ? (
+                      <span className="text-lg font-semibold text-brand-blue">
+                        {formatNaira(p.price)}
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-ink/5 px-3 py-1 text-xs font-semibold text-ink/70">
+                        Contact for price
+                      </span>
+                    )}
                   </div>
                   <Button
                     href={waLink(
-                      `Hi MYC, I'm interested in the ${p.name} (${p.spec}). Please share pricing and availability.`,
+                      p.price
+                        ? `Hi MYC, I want to buy the ${p.name} (${p.spec}) for ${formatNaira(p.price)}. Please confirm availability and payment details.`
+                        : `Hi MYC, I'm interested in the ${p.name} (${p.spec}). Please share pricing and availability.`,
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    variant="outline"
+                    variant={p.price ? 'primary' : 'outline'}
                     className="mt-4 w-full"
                   >
-                    Enquire on WhatsApp
+                    {p.price ? 'Buy Now' : 'Enquire on WhatsApp'}
                   </Button>
                 </div>
               </div>
