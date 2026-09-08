@@ -20,21 +20,29 @@ const services = [
     icon: Sun,
     title: 'Solar Power Systems',
     desc: 'Design, supply and installation of reliable solar power systems for homes and businesses.',
+    link: '/product',
+    linkLabel: 'Shop equipment',
   },
   {
     icon: ShieldCheck,
     title: 'CCTV & Security',
     desc: 'Professional CCTV camera installation and security systems that keep your property protected.',
+    link: '/product',
+    linkLabel: 'Shop equipment',
   },
   {
     icon: Building2,
     title: 'Building Construction',
     desc: 'End-to-end construction services delivered to a high standard, on time and on budget.',
+    link: '/contact',
+    linkLabel: 'Get a quote',
   },
   {
     icon: HardHat,
     title: 'General Contracting',
     desc: 'Full-service contracting for projects of every scale, managed by an experienced team.',
+    link: '/contact',
+    linkLabel: 'Get a quote',
   },
 ]
 
@@ -129,7 +137,7 @@ export default function Home() {
                 <Button to="/contact">
                   Get a Quote <ArrowRight size={16} />
                 </Button>
-                <Button to="/product" variant="outline">
+                <Button href="#services" variant="outline">
                   View Our Services
                 </Button>
               </div>
@@ -162,7 +170,7 @@ export default function Home() {
       </section>
 
       {/* Services */}
-      <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
+      <section id="services" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-20 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <Tag>What We Do</Tag>
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
@@ -184,10 +192,10 @@ export default function Home() {
               <h3 className="mt-5 font-semibold text-ink">{s.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{s.desc}</p>
               <Link
-                to="/product"
+                to={s.link}
                 className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-green"
               >
-                Learn more <ArrowRight size={14} />
+                {s.linkLabel} <ArrowRight size={14} />
               </Link>
             </div>
           ))}

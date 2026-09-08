@@ -1,158 +1,176 @@
+import { useState } from 'react'
 import {
   Sun,
-  ShieldCheck,
-  Building2,
-  HardHat,
+  PlugZap,
+  BatteryCharging,
+  Camera,
   ArrowRight,
-  Check,
-  ClipboardList,
-  PenTool,
+  MessageCircle,
   Wrench,
-  LifeBuoy,
 } from 'lucide-react'
 import Tag from '../components/Tag'
 import Button from '../components/Button'
 import IconPanel from '../components/IconPanel'
+import { waLink } from '../lib/whatsapp'
+import deyeInverter from '../assets/deye-hybrid-inverter-8kw.png'
+import deyeBattery from '../assets/deye-battery-se-f5l.png'
+import eastmanBattery from '../assets/eastman-solar-lifepo4-battery.jpg'
 
-const products = [
-  {
-    icon: Sun,
-    tone: 'green',
-    title: 'Solar Power Systems',
-    desc: 'Complete solar solutions sized to your load — from single-panel backup to full off-grid systems for homes, offices, and estates.',
-    features: [
-      'Free load assessment & site survey',
-      'Panels, inverters & battery installation',
-      'Hybrid and off-grid system design',
-      '1-year installation warranty',
-    ],
-  },
-  {
-    icon: ShieldCheck,
-    tone: 'blue',
-    title: 'CCTV & Security Systems',
-    desc: 'Camera systems and access control designed around how your property actually needs to be protected — indoors, outdoors, and remotely monitored.',
-    features: [
-      'HD & night-vision camera installation',
-      'Remote mobile viewing setup',
-      'Access control & alarm integration',
-      'Ongoing maintenance plans',
-    ],
-  },
-  {
-    icon: Building2,
-    tone: 'dark',
-    title: 'Building Construction',
-    desc: 'From foundation to finishing, we manage residential and commercial builds with clear timelines and dependable site supervision.',
-    features: [
-      'Architectural & structural planning support',
-      'Residential & commercial builds',
-      'Quality materials sourcing',
-      'Regular progress reporting',
-    ],
-  },
-  {
-    icon: HardHat,
-    tone: 'green',
-    title: 'General Contracting',
-    desc: 'Renovations, fit-outs, and multi-trade projects handled by one accountable team — so you deal with a single point of contact.',
-    features: [
-      'Renovation & remodeling',
-      'Multi-trade project management',
-      'Budget & procurement oversight',
-      'Post-project handover support',
-    ],
-  },
+const categories = [
+  { key: 'panels', label: 'Solar Panels', icon: Sun, tone: 'green' },
+  { key: 'inverters', label: 'Inverters', icon: PlugZap, tone: 'blue' },
+  { key: 'batteries', label: 'Batteries', icon: BatteryCharging, tone: 'dark' },
+  { key: 'cctv', label: 'CCTV & Security', icon: Camera, tone: 'green' },
 ]
 
-const process = [
-  { icon: ClipboardList, title: 'Consultation', desc: 'We assess your site, needs, and budget — free of charge.' },
-  { icon: PenTool, title: 'Design & Quote', desc: 'You receive a clear scope of work and transparent pricing.' },
-  { icon: Wrench, title: 'Installation', desc: 'Our trained engineers execute the project to specification.' },
-  { icon: LifeBuoy, title: 'Ongoing Support', desc: 'We stay reachable for maintenance and follow-up service.' },
+const products = [
+  { category: 'panels', name: 'Monocrystalline Solar Panel', spec: '350W' },
+  { category: 'panels', name: 'Monocrystalline Solar Panel', spec: '450W' },
+  { category: 'panels', name: 'Monocrystalline Solar Panel', spec: '550W' },
+  { category: 'inverters', name: 'Pure Sine Wave Inverter', spec: '3kVA / 24V' },
+  { category: 'inverters', name: 'Pure Sine Wave Inverter', spec: '5kVA / 48V' },
+  { category: 'inverters', name: 'Deye Hybrid Inverter', spec: '8kW', image: deyeInverter },
+  { category: 'batteries', name: 'Deye Low-Voltage Battery', spec: 'SE-F5(L)', image: deyeBattery },
+  {
+    category: 'batteries',
+    name: 'Eastman Solar LiFePO4 Battery',
+    spec: '24V (ES25.6-230LP) & 48V (ES51.2-230LP)',
+    image: eastmanBattery,
+  },
+  { category: 'batteries', name: 'Tubular / AGM Battery', spec: '200Ah / 12V' },
+  { category: 'cctv', name: 'HD Dome Camera', spec: 'Indoor, Night Vision' },
+  { category: 'cctv', name: 'HD Bullet Camera', spec: 'Outdoor, Night Vision' },
+  { category: 'cctv', name: 'NVR Kit', spec: '4 / 8 / 16 Channel' },
 ]
 
 export default function Product() {
+  const [active, setActive] = useState('all')
+
+  const visible =
+    active === 'all' ? products : products.filter((p) => p.category === active)
+
   return (
     <div>
       <section className="bg-brand-green-light/40">
         <div className="mx-auto max-w-4xl px-5 py-20 text-center lg:px-8">
-          <Tag>Our Products & Services</Tag>
+          <Tag>Shop Equipment</Tag>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-            Everything You Need, Under One Contractor
+            Solar Panels, Inverters, Batteries & CCTV Equipment
           </h1>
           <p className="mx-auto mt-6 max-w-2xl leading-relaxed text-muted">
-            Solar power, security systems, and construction — each delivered
-            to the same standard, by the same accountable team.
+            Genuine equipment sold directly by MYC Innovation — with
+            installation available from the same team if you need it.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-        <div className="space-y-16">
-          {products.map((p, i) => (
-            <div
-              key={p.title}
-              className={`grid items-center gap-10 lg:grid-cols-2 ${
-                i % 2 === 1 ? 'lg:[&>*:first-child]:order-2' : ''
+      {/* Category filter */}
+      <section className="sticky top-[73px] z-30 border-b border-ink/8 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-5 py-4 lg:px-8">
+          <button
+            onClick={() => setActive('all')}
+            className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+              active === 'all'
+                ? 'bg-brand-green text-white'
+                : 'bg-ink/5 text-ink/70 hover:bg-ink/10'
+            }`}
+          >
+            All Products
+          </button>
+          {categories.map((c) => (
+            <button
+              key={c.key}
+              onClick={() => setActive(c.key)}
+              className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                active === c.key
+                  ? 'bg-brand-green text-white'
+                  : 'bg-ink/5 text-ink/70 hover:bg-ink/10'
               }`}
             >
-              <IconPanel icon={p.icon} tone={p.tone} className="h-72" size={64} />
-              <div>
-                <h2 className="text-2xl font-semibold text-ink sm:text-3xl">{p.title}</h2>
-                <p className="mt-4 leading-relaxed text-muted">{p.desc}</p>
-                <ul className="mt-6 space-y-3">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm text-ink/80">
-                      <Check size={18} className="mt-0.5 shrink-0 text-brand-green" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Button to="/contact" className="mt-8">
-                  Request This Service <ArrowRight size={16} />
-                </Button>
-              </div>
-            </div>
+              <c.icon size={15} />
+              {c.label}
+            </button>
           ))}
         </div>
       </section>
 
-      {/* Process */}
-      <section className="bg-ink">
-        <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-          <div className="mx-auto max-w-xl text-center">
-            <Tag dark>How We Work</Tag>
-            <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">
-              A Straightforward Process, Every Time
-            </h2>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {process.map((step, i) => (
-              <div key={step.title} className="relative rounded-2xl border border-white/10 bg-white/5 p-6">
-                <span className="text-xs font-semibold text-brand-green">STEP {i + 1}</span>
-                <IconPanel icon={step.icon} tone="green" className="mt-4 h-12 w-12" size={20} />
-                <h3 className="mt-4 font-semibold text-white">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/60">{step.desc}</p>
+      {/* Price notice */}
+      <div className="mx-auto max-w-7xl px-5 pt-8 lg:px-8">
+        <div className="flex items-start gap-3 rounded-2xl bg-amber/10 px-5 py-4 text-sm text-amber-dark">
+          <MessageCircle size={18} className="mt-0.5 shrink-0" />
+          <p>
+            Prices vary by specification, brand, and availability — message
+            us on WhatsApp for today's pricing on any item below.
+          </p>
+        </div>
+      </div>
+
+      {/* Product grid */}
+      <section className="mx-auto max-w-7xl px-5 py-12 lg:px-8">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {visible.map((p, i) => {
+            const cat = categories.find((c) => c.key === p.category)
+            return (
+              <div
+                key={`${p.name}-${p.spec}-${i}`}
+                className="flex flex-col overflow-hidden rounded-2xl border border-ink/8"
+              >
+                {p.image ? (
+                  <div className="flex h-40 items-center justify-center bg-ink/5 p-4">
+                    <img
+                      src={p.image}
+                      alt={`${p.name} ${p.spec}`}
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <IconPanel icon={cat.icon} tone={cat.tone} className="h-40" size={36} />
+                )}
+                <div className="flex flex-1 flex-col p-5">
+                  <span className="text-xs font-semibold uppercase tracking-wide text-brand-green">
+                    {cat.label}
+                  </span>
+                  <h3 className="mt-1 font-semibold text-ink">{p.name}</h3>
+                  <p className="mt-1 text-sm text-muted">{p.spec}</p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="rounded-full bg-ink/5 px-3 py-1 text-xs font-semibold text-ink/70">
+                      Contact for price
+                    </span>
+                  </div>
+                  <Button
+                    href={waLink(
+                      `Hi MYC, I'm interested in the ${p.name} (${p.spec}). Please share pricing and availability.`,
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outline"
+                    className="mt-4 w-full"
+                  >
+                    Enquire on WhatsApp
+                  </Button>
+                </div>
               </div>
-            ))}
-          </div>
+            )
+          })}
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
-        <div className="flex flex-col items-center justify-between gap-6 rounded-3xl bg-brand-blue px-8 py-12 text-center sm:flex-row sm:text-left sm:px-12">
-          <div>
+      {/* Installation note */}
+      <section className="mx-auto max-w-7xl px-5 pb-20 lg:px-8">
+        <div className="flex flex-col items-center gap-6 rounded-3xl bg-ink px-8 py-12 text-center sm:flex-row sm:text-left sm:px-12">
+          <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand-green">
+            <Wrench size={24} className="text-white" />
+          </div>
+          <div className="flex-1">
             <h3 className="text-2xl font-semibold text-white">
-              Not sure which service you need?
+              Need it installed, not just supplied?
             </h3>
             <p className="mt-2 text-white/60">
-              Talk to our team — we’ll recommend the right solution for your budget.
+              Our team installs everything we sell — solar systems, inverters, batteries, and CCTV.
             </p>
           </div>
           <Button to="/contact" className="shrink-0">
-            Get a Free Quote <ArrowRight size={16} />
+            Get a Quote <ArrowRight size={16} />
           </Button>
         </div>
       </section>
