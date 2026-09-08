@@ -14,6 +14,12 @@ import {
 import Tag from '../components/Tag'
 import Button from '../components/Button'
 import IconPanel from '../components/IconPanel'
+import { waLink } from '../lib/whatsapp'
+
+const REGISTER_MESSAGE =
+  "Hi MYC Academy, I'd like to register for the Solar & Inverter Installer training (21 Sept – 5 Oct 2026). Please send me the next steps."
+const ENQUIRY_MESSAGE =
+  'Hi MYC Academy, I have a question about the Solar & Inverter Installer training.'
 
 const curriculum = [
   {
@@ -60,7 +66,7 @@ export default function Academy() {
             start building a career in solar installation.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button to="/contact">
+            <Button href={waLink(REGISTER_MESSAGE)} target="_blank" rel="noopener noreferrer">
               Register Now <ArrowRight size={16} />
             </Button>
             <Button href="#curriculum" variant="outline">
@@ -100,7 +106,12 @@ export default function Academy() {
             ))}
           </div>
           <div className="border-t border-ink/8 px-8 py-6">
-            <Button to="/contact" className="w-full sm:w-auto">
+            <Button
+              href={waLink(REGISTER_MESSAGE)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto"
+            >
               Register & Secure Your Spot <ArrowRight size={16} />
             </Button>
           </div>
@@ -168,7 +179,7 @@ export default function Academy() {
               Slots are limited — reach out today to secure your spot.
             </p>
           </div>
-          <Button to="/contact" className="shrink-0">
+          <Button href={waLink(ENQUIRY_MESSAGE)} target="_blank" rel="noopener noreferrer" className="shrink-0">
             Talk to the Academy <ArrowRight size={16} />
           </Button>
         </div>

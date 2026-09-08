@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { X, Calendar, Clock, Wallet } from 'lucide-react'
 import Button from './Button'
+import { waLink } from '../lib/whatsapp'
 
 const STORAGE_KEY = 'myc-academy-promo-dismissed'
+const REGISTER_MESSAGE =
+  "Hi MYC Academy, I'd like to register for the Solar & Inverter Installer training (21 Sept – 5 Oct 2026). Please send me the next steps."
 
 export default function PromoModal() {
   const [open, setOpen] = useState(false)
@@ -80,7 +83,13 @@ export default function PromoModal() {
           <Button to="/academy" onClick={close} variant="outline" className="flex-1">
             Learn More
           </Button>
-          <Button to="/contact" onClick={close} className="flex-1">
+          <Button
+            href={waLink(REGISTER_MESSAGE)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={close}
+            className="flex-1"
+          >
             Register Now
           </Button>
         </div>
