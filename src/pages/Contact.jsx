@@ -32,11 +32,10 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Enquiry: ${form.service}`)
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\nService: ${form.service}\n\nMessage:\n${form.message}`,
+    const text = encodeURIComponent(
+      `Enquiry: ${form.service}\n\nName: ${form.name}\nEmail: ${form.email}\nPhone: ${form.phone}\n\nMessage:\n${form.message}`,
     )
-    window.location.href = `mailto:info@myc-innovation.com?subject=${subject}&body=${body}`
+    window.open(`https://wa.me/2348036032275?text=${text}`, '_blank', 'noopener,noreferrer')
     setSent(true)
   }
 
@@ -96,7 +95,7 @@ export default function Contact() {
               <div className="flex h-full flex-col items-center justify-center py-16 text-center">
                 <CheckCircle2 size={48} className="text-brand-green" />
                 <h3 className="mt-4 text-xl font-semibold text-ink">
-                  Your email app should now be open
+                  WhatsApp should now be open
                 </h3>
                 <p className="mt-2 max-w-sm text-sm text-muted">
                   Just hit send there and our team will get back to you
