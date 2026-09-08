@@ -11,6 +11,7 @@ import {
 import Tag from '../components/Tag'
 import Button from '../components/Button'
 import IconPanel from '../components/IconPanel'
+import CategoryDropdown from '../components/CategoryDropdown'
 import { waLink } from '../lib/whatsapp'
 import deyeInverter from '../assets/deye-hybrid-inverter-8kw.png'
 import deyeBattery from '../assets/deye-battery-se-f5l.png'
@@ -56,6 +57,8 @@ const products = [
   { category: 'cctv', name: 'NVR Kit', spec: '4 / 8 / 16 Channel' },
 ]
 
+const filterOptions = [{ key: 'all', label: 'All Products' }, ...categories]
+
 const formatNaira = (n) => `₦${n.toLocaleString('en-NG')}`
 
 export default function Product() {
@@ -82,19 +85,13 @@ export default function Product() {
       {/* Category filter */}
       <section className="sticky top-[73px] z-30 border-b border-ink/8 bg-white/95 backdrop-blur">
         <div className="mx-auto max-w-7xl px-5 py-4 lg:px-8">
-          {/* Mobile: dropdown */}
-          <select
+          {/* Mobile: custom dropdown */}
+          <CategoryDropdown
+            options={filterOptions}
             value={active}
-            onChange={(e) => setActive(e.target.value)}
-            className="w-full rounded-full border border-ink/15 bg-white px-4 py-2.5 text-sm font-semibold text-ink sm:hidden"
-          >
-            <option value="all">All Products</option>
-            {categories.map((c) => (
-              <option key={c.key} value={c.key}>
-                {c.label}
-              </option>
-            ))}
-          </select>
+            onChange={setActive}
+            className="sm:hidden"
+          />
 
           {/* Tablet & up: pills */}
           <div className="hidden gap-2 overflow-x-auto sm:flex">
